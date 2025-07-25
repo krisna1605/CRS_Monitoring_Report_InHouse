@@ -185,89 +185,94 @@ public final class Report_Rating extends javax.swing.JFrame {
         } else
             
             try {
-            String sql = "WITH RankedData AS ("
-                    + "SELECT "
-                    + "    CRM.CU_REF, "
-                    + "    MAX(CRM.AP_REGNO) AS AP_REGNO, "
-                    + "    ROW_NUMBER() OVER (PARTITION BY CRM.CU_REF ORDER BY CRM.AP_REGNO DESC) AS APP, "
-                    + "    C.CU_CIF AS CIF, "
-                    + "    CC.CU_COMPNAME AS CompName, "
-                    + "    CRM.REPORTTYPE AS ReportType, "
-                    + "    DATENAME(MONTH, MAX(CLM.IS_DATE_PERIODE)) AS RatingMonth, "
-                    + "    YEAR(MAX(CLM.IS_DATE_PERIODE)) AS RatingYear, "
-                    + "    CAST(MAX(CLM.IS_DATE_PERIODE) AS DATE) AS FicialDate, "
-                    + "    R.RATINGBY AS RateBy, "
-                    + "    CAST(MAX(clm.IS_DATE_PERIODE) AS DATE) AS LastDateOrder, "
-                    + "    CRM.CURRENT_RATIO AS CurrentRatio, "
-                    + "    CRM.DEBT_EQUITY_RATIO AS DebtRatio, "
-                    + "    cNM.BS_SHAREHOLDER_EQUITY AS BsEquity, "
-                    + "    CRM.OPERATING_MARGIN AS OprMargin, "
-                    + "    CLM.IS_OPR_EARN AS OprEarn, "
-                    + "    CLM.IS_NET_SALES AS NetSales, "
-                    + "    CRM.DEBT_SERV_COVERAGE AS DebtServ, "
-                    + "    CNM.BS_CURR_LIAB AS SHORT_TERM_BORROWING, "
-                    + "    CNM.BS_LONGTERM_LIAB AS LONG_TERM_BORROWING,"
-                    + "    CLM.IS_CURRENCY AS CURRENCY, "
-                    + "    CNM.BS_LAND AS LAND, "
-                    + "    CNM.BS_BUILDINGS AS BUILDING, "
-                    + "    CNM.BS_CASH_BANK AS CASH_DEPOSIT "
-                    + "FROM "
-                    + "    CA_RATIO_MIDDLE CRM "
-                    + "    LEFT JOIN CUSTOMER C ON CRM.CU_REF = c.CU_REF "
-                    + "    LEFT JOIN CUST_COMPANY CC ON CRM.CU_REF = cc.CU_REF "
-                    + "    LEFT JOIN RATINGFINALADJUSTMENT R ON CRM.AP_REGNO = r.AP_REGNO "
-                    + "    LEFT JOIN RFRATINGCLASS R2 ON r.FINALRATING = r2.RATEID "
-                    + "    LEFT JOIN CA_LABARUGI_MIDDLE CLM ON CRM.CU_REF = clm.CU_REF "
-                    + "        AND CRM.AP_REGNO = clm.AP_REGNO "
-                    + "        AND CRM.DATE_PERIODE = clm.IS_DATE_PERIODE "
-                    + "    LEFT JOIN CA_NERACA_MIDDLE cnm ON CRM.CU_REF = cnm.CU_REF "
-                    + "        AND CRM.AP_REGNO = cnm.AP_REGNO "
-                    + "        AND CRM.DATE_PERIODE = cnm.BS_DATE_PERIODE "
-                    + "    LEFT JOIN CA_REKON_MIDDLE CRM2 ON CRM.CU_REF = CRM2.CU_REF "
-                    + "        AND CRM.AP_REGNO = CRM2.AP_REGNO "
-                    + "        AND CRM.DATE_PERIODE = CRM2.DATE_PERIODE "
-                    + "    LEFT JOIN CA_RATIO_BPR cpr ON CRM.CU_REF = cpr.CU_REF "
-                    + "        AND CRM.AP_REGNO = cpr.AP_REGNO "
-                    + "    LEFT JOIN APPLICATION a ON CRM.CU_REF = a.CU_REF "
-                    + "        AND CRM.AP_REGNO = a.AP_REGNO "
-                    + "    LEFT JOIN SCOREBCG_RESULTHISTORY sr ON CRM.AP_REGNO = sr.AP_REGNO "
-                    + "WHERE "
-                    + "    c.CU_CIF IS NOT NULL "
-                    + "    AND C.CU_CIF NOT LIKE '%C%' "
-                    + "    AND CRM.REPORTTYPE IN (" + String.join(", ", selectedOptions2) + ") "
-                    + "    AND MONTH (clm.IS_DATE_PERIODE) IN (" + String.join(", ", selectedOptions) + ") "
-                    + "    AND YEAR(clm.IS_DATE_PERIODE) = " + "'" + FYear.getText() + "'"
-                    + "GROUP BY "
-                    + "    c.CU_CIF, "
-                    + "    cc.CU_COMPNAME, "
-                    + "    r.FINALRATING, "
-                    + "    r2.RATEDESC, "
-                    + "    r.ADJUSTRATING, "
-                    + "    r.RATINGDATE, "
-                    + "    r.RATINGBY, "
-                    + "    a.AP_USERNAME, "
-                    + "    CRM.CURRENT_RATIO, "
-                    + "    CRM.DEBT_EQUITY_RATIO, "
-                    + "    cnm.BS_SHAREHOLDER_EQUITY, "
-                    + "    clm.IS_NET_SALES, "
-                    + "    clm.IS_DATE_PERIODE, "
-                    + "    CRM.OPERATING_MARGIN, "
-                    + "    clm.IS_OPR_EARN, "
-                    + "    CRM.DEBT_SERV_COVERAGE, "
-                    + "    CRM.LONGTERM_DEBT_TO_EQUITY, "
-                    + "    CRM.REPORTTYPE, "
-                    + "    CRM.AP_REGNO, "
-                    + "    CRM.CU_REF, "
-                    + "    CNM.BS_CURR_LIAB, "
-                    + "    CNM.BS_LONGTERM_LIAB, "
-                    + "    CLM.IS_CURRENCY, "
-                    + "    CNM.BS_LAND, "
-                    + "    CNM.BS_BUILDINGS, "
-                    + "    CNM.BS_CASH_BANK "
-                    + ") "
-                    + "SELECT * "
-                    + "FROM RankedData "
-                    + "WHERE APP = 1;";
+            String sql
+                    = "WITH RANKEDDATA AS (\n"
+                    + "    SELECT \n"
+                    + "        CRM.CU_REF,\n"
+                    + "        MAX(CRM.AP_REGNO) AS AP_REGNO,\n"
+                    + "        ROW_NUMBER() OVER (PARTITION BY CRM.CU_REF ORDER BY CRM.AP_REGNO DESC) AS APP,\n"
+                    + "        C.CU_CIF AS CIF,\n"
+                    + "        CC.CU_COMPNAME AS COMPNAME,\n"
+                    + "        CRM.REPORTTYPE AS REPORTTYPE,\n"
+                    + "        DATENAME(MONTH, MAX(CLM.IS_DATE_PERIODE)) AS RATINGMONTH,\n"
+                    + "        YEAR(MAX(CLM.IS_DATE_PERIODE)) AS RATINGYEAR,\n"
+                    + "        CAST(MAX(CLM.IS_DATE_PERIODE) AS DATE) AS FICIALDATE,\n"
+                    + "        R.RATINGBY AS RATEBY,\n"
+                    + "        CAST(MAX(CLM.IS_DATE_PERIODE) AS DATE) AS LASTDATEORDER,\n"
+                    + "        CRM.CURRENT_RATIO AS CURRENTRATIO,\n"
+                    + "        CRM.DEBT_EQUITY_RATIO AS DEBTRATIO,\n"
+                    + "        CNM.BS_SHAREHOLDER_EQUITY AS BSEQUITY,\n"
+                    + "        CRM.OPERATING_MARGIN AS OPRMARGIN,\n"
+                    + "        CLM.IS_OPR_EARN AS OPREARN,\n"
+                    + "        CLM.IS_NET_SALES AS NETSALES,\n"
+                    + "        CRM.DEBT_SERV_COVERAGE AS DEBTSERV,\n"
+                    + "        CNM.BS_SHT_TERM_LOAN AS SHORT_TERM_BORROWING,\n"
+                    + "        CNM.BS_LG_TRM_LOAN_RECEIV AS LONG_TERM_BORROWING,\n"
+                    + "        CLM.IS_CURRENCY AS CURRENCY,\n"
+                    + "        CNM.BS_LAND AS LAND,\n"
+                    + "        CNM.BS_BUILDINGS AS BUILDING,\n"
+                    + "        CNM.BS_CASH_BANK AS CASH_DEPOSIT,\n"
+                    + "        CNM.BS_DBST AS SHORT_TERM,\n"
+                    + "        CNM.BS_LONGTERM_DEBT AS LONG_TERM\n"
+                    + "    FROM CA_RATIO_MIDDLE CRM \n"
+                    + "    LEFT JOIN CUSTOMER C ON CRM.CU_REF = C.CU_REF \n"
+                    + "    LEFT JOIN CUST_COMPANY CC ON CRM.CU_REF = CC.CU_REF\n"
+                    + "    LEFT JOIN RATINGFINALADJUSTMENT R ON CRM.AP_REGNO = R.AP_REGNO\n"
+                    + "    LEFT JOIN RFRATINGCLASS R2 ON R.FINALRATING = R2.RATEID\n"
+                    + "    LEFT JOIN CA_LABARUGI_MIDDLE CLM ON CRM.CU_REF = CLM.CU_REF \n"
+                    + "        AND CRM.AP_REGNO = CLM.AP_REGNO \n"
+                    + "        AND CRM.DATE_PERIODE = CLM.IS_DATE_PERIODE \n"
+                    + "    LEFT JOIN CA_NERACA_MIDDLE CNM ON CRM.CU_REF = CNM.CU_REF \n"
+                    + "        AND CRM.AP_REGNO = CNM.AP_REGNO \n"
+                    + "        AND CRM.DATE_PERIODE = CNM.BS_DATE_PERIODE \n"
+                    + "    LEFT JOIN CA_REKON_MIDDLE CRM2 ON CRM.CU_REF = CRM2.CU_REF \n"
+                    + "        AND CRM.AP_REGNO = CRM2.AP_REGNO \n"
+                    + "        AND CRM.DATE_PERIODE = CRM2.DATE_PERIODE \n"
+                    + "    LEFT JOIN CA_RATIO_BPR CPR ON CRM.CU_REF = CPR.CU_REF \n"
+                    + "        AND CRM.AP_REGNO = CPR.AP_REGNO\n"
+                    + "    LEFT JOIN APPLICATION A ON CRM.CU_REF = A.CU_REF \n"
+                    + "        AND CRM.AP_REGNO = A.AP_REGNO \n"
+                    + "    LEFT JOIN SCOREBCG_RESULTHISTORY SR ON CRM.AP_REGNO = SR.AP_REGNO\n"
+                    + "    WHERE \n"
+                    + "        C.CU_CIF IS NOT NULL AND \n"
+                    + "        C.CU_CIF NOT LIKE '%C%' AND \n"
+                    + "        CRM.REPORTTYPE IN (" + String.join(", ", selectedOptions2) + ") AND \n"
+                    + "        MONTH(CLM.IS_DATE_PERIODE) IN (" + String.join(", ", selectedOptions) + ") AND \n"
+                    + "        YEAR(CLM.IS_DATE_PERIODE) = '" + FYear.getText() + "'\n"
+                    + "    GROUP BY \n"
+                    + "        C.CU_CIF,\n"
+                    + "        CC.CU_COMPNAME,\n"
+                    + "        R.FINALRATING,\n"
+                    + "        R2.RATEDESC,\n"
+                    + "        R.ADJUSTRATING,\n"
+                    + "        R.RATINGDATE,\n"
+                    + "        R.RATINGBY,\n"
+                    + "        A.AP_USERNAME,\n"
+                    + "        CRM.CURRENT_RATIO,\n"
+                    + "        CRM.DEBT_EQUITY_RATIO,\n"
+                    + "        CNM.BS_SHAREHOLDER_EQUITY,\n"
+                    + "        CLM.IS_NET_SALES,\n"
+                    + "        CLM.IS_DATE_PERIODE,\n"
+                    + "        CRM.OPERATING_MARGIN,\n"
+                    + "        CLM.IS_OPR_EARN,\n"
+                    + "        CRM.DEBT_SERV_COVERAGE,\n"
+                    + "        CRM.LONGTERM_DEBT_TO_EQUITY,\n"
+                    + "        CRM.REPORTTYPE,\n"
+                    + "        CPR.LDR,\n"
+                    + "        CRM.AP_REGNO,\n"
+                    + "        CRM.CU_REF,\n"
+                    + "        CNM.BS_SHT_TERM_LOAN,\n"
+                    + "        CNM.BS_LG_TRM_LOAN_RECEIV,\n"
+                    + "        CLM.IS_CURRENCY,\n"
+                    + "        CNM.BS_LAND,\n"
+                    + "        CNM.BS_BUILDINGS,\n"
+                    + "        CNM.BS_CASH_BANK,\n"
+                    + "        CNM.BS_DBST,\n"
+                    + "        CNM.BS_LONGTERM_DEBT\n"
+                    + ")\n"
+                    + "SELECT * \n"
+                    + "FROM RANKEDDATA \n"
+                    + "WHERE APP = 1";
 
             stat = con.createStatement();
             res = stat.executeQuery(sql);
@@ -295,7 +300,8 @@ public final class Report_Rating extends javax.swing.JFrame {
                     res.getString("CURRENCY"),
                     res.getString("LAND"),
                     res.getString("BUILDING"),
-                    String.format("%.10f", res.getFloat("CASH_DEPOSIT"))
+                    res.getString("CASH_DEPOSIT")
+                    //String.format("%.10f", res.getFloat("CASH_DEPOSIT"))
 
                 /*res.getString("MappingCollect"),
                     /decimalFormat.format(res.getDouble("NetSales")),
@@ -351,8 +357,7 @@ public final class Report_Rating extends javax.swing.JFrame {
         String search = FSearchCriteria.getText();
 
         //this.index = 1;
-        Object[] ColumnContent = {"CIF", "Nama Debitur", "Report Type", "Month", "Year", "Ficial Date", "Rating By", "Last Date Order", "Current Ratio", "Debt Equity Ratio", "Shareholder Equity", "Operating Margin", "Opr Earn", "Net Sales", "Debt Serv Coverage"};
-
+        //Object[] ColumnContent = {"CIF", "Nama Debitur", "Report Type", "Month", "Year", "Ficial Date", "Rating By", "Last Date Order", "Current Ratio", "Debt Equity Ratio", "Shareholder Equity", "Operating Margin", "Opr Earn", "Net Sales", "Debt Serv Coverage"};
         //Filter Month
         ArrayList<String> selectedOptions = new ArrayList<>();
         ArrayList<String> selectedOptions2 = new ArrayList<>();
@@ -429,90 +434,95 @@ public final class Report_Rating extends javax.swing.JFrame {
         } else
             
             try {
-            String sql = "WITH RankedData AS ("
-                    + "SELECT "
-                    + "    CRM.CU_REF, "
-                    + "    MAX(CRM.AP_REGNO) AS AP_REGNO, "
-                    + "    ROW_NUMBER() OVER (PARTITION BY CRM.CU_REF ORDER BY CRM.AP_REGNO DESC) AS APP, "
-                    + "    c.CU_CIF AS CIF, "
-                    + "    cc.CU_COMPNAME AS CompName, "
-                    + "    CRM.REPORTTYPE AS ReportType, "
-                    + "    DATENAME(MONTH, MAX(CLM.IS_DATE_PERIODE)) AS RatingMonth, "
-                    + "    YEAR(MAX(CLM.IS_DATE_PERIODE)) AS RatingYear, "
-                    + "    CAST(MAX(CLM.IS_DATE_PERIODE) AS DATE) AS FicialDate, "
-                    + "    r.RATINGBY AS RateBy, "
-                    + "    CAST(MAX(clm.IS_DATE_PERIODE) AS DATE) AS LastDateOrder, "
-                    + "    CRM.CURRENT_RATIO AS CurrentRatio, "
-                    + "    CRM.DEBT_EQUITY_RATIO AS DebtRatio, "
-                    + "    cnm.BS_SHAREHOLDER_EQUITY AS BsEquity, "
-                    + "    CRM.OPERATING_MARGIN AS OprMargin, "
-                    + "    clm.IS_OPR_EARN AS OprEarn, "
-                    + "    clm.IS_NET_SALES AS NetSales, "
-                    + "    CRM.DEBT_SERV_COVERAGE AS DebtServ, "
-                    + "    CNM.BS_CURR_LIAB AS SHORT_TERM_BORROWING, "
-                    + "    CNM.BS_LONGTERM_LIAB AS LONG_TERM_BORROWING,"
-                    + "    CLM.IS_CURRENCY AS CURRENCY, "
-                    + "    CNM.BS_LAND AS LAND, "
-                    + "    CNM.BS_BUILDINGS AS BUILDING, "
-                    + "    CNM.BS_CASH_BANK AS CASH_DEPOSIT "
-                    + "FROM "
-                    + "    CA_RATIO_MIDDLE CRM "
-                    + "    LEFT JOIN CUSTOMER c ON CRM.CU_REF = c.CU_REF "
-                    + "    LEFT JOIN CUST_COMPANY cc ON CRM.CU_REF = cc.CU_REF "
-                    + "    LEFT JOIN RATINGFINALADJUSTMENT r ON CRM.AP_REGNO = r.AP_REGNO "
-                    + "    LEFT JOIN RFRATINGCLASS r2 ON r.FINALRATING = r2.RATEID "
-                    + "    LEFT JOIN CA_LABARUGI_MIDDLE clm ON CRM.CU_REF = clm.CU_REF "
-                    + "        AND CRM.AP_REGNO = clm.AP_REGNO "
-                    + "        AND CRM.DATE_PERIODE = clm.IS_DATE_PERIODE "
-                    + "    LEFT JOIN CA_NERACA_MIDDLE cnm ON CRM.CU_REF = cnm.CU_REF "
-                    + "        AND CRM.AP_REGNO = cnm.AP_REGNO "
-                    + "        AND CRM.DATE_PERIODE = cnm.BS_DATE_PERIODE "
-                    + "    LEFT JOIN CA_REKON_MIDDLE CRM2 ON CRM.CU_REF = CRM2.CU_REF "
-                    + "        AND CRM.AP_REGNO = CRM2.AP_REGNO "
-                    + "        AND CRM.DATE_PERIODE = CRM2.DATE_PERIODE "
-                    + "    LEFT JOIN CA_RATIO_BPR cpr ON CRM.CU_REF = cpr.CU_REF "
-                    + "        AND CRM.AP_REGNO = cpr.AP_REGNO "
-                    + "    LEFT JOIN APPLICATION a ON CRM.CU_REF = a.CU_REF "
-                    + "        AND CRM.AP_REGNO = a.AP_REGNO "
-                    + "    LEFT JOIN SCOREBCG_RESULTHISTORY sr ON CRM.AP_REGNO = sr.AP_REGNO "
-                    + "WHERE "
-                    + "    c.CU_CIF IS NOT NULL "
-                    + "    AND C.CU_CIF NOT LIKE '%C%' "
-                    + "    AND CRM.REPORTTYPE IN (" + String.join(", ", selectedOptions2) + ") "
-                    + "    AND MONTH (clm.IS_DATE_PERIODE) IN (" + String.join(", ", selectedOptions) + ") "
-                    + "    AND cc.CU_COMPNAME LIKE '%" + search + "%'"
-                    + "    AND YEAR(clm.IS_DATE_PERIODE) = " + "'" + FYear.getText() + "'"
-                    + "GROUP BY "
-                    + "    c.CU_CIF, "
-                    + "    cc.CU_COMPNAME, "
-                    + "    r.FINALRATING, "
-                    + "    r2.RATEDESC, "
-                    + "    r.ADJUSTRATING, "
-                    + "    r.RATINGDATE, "
-                    + "    r.RATINGBY, "
-                    + "    a.AP_USERNAME, "
-                    + "    CRM.CURRENT_RATIO, "
-                    + "    CRM.DEBT_EQUITY_RATIO, "
-                    + "    cnm.BS_SHAREHOLDER_EQUITY, "
-                    + "    clm.IS_NET_SALES, "
-                    + "    clm.IS_DATE_PERIODE, "
-                    + "    CRM.OPERATING_MARGIN, "
-                    + "    clm.IS_OPR_EARN, "
-                    + "    CRM.DEBT_SERV_COVERAGE, "
-                    + "    CRM.LONGTERM_DEBT_TO_EQUITY, "
-                    + "    CRM.REPORTTYPE, "
-                    + "    CRM.AP_REGNO, "
-                    + "    CRM.CU_REF, "
-                    + "    CNM.BS_CURR_LIAB, "
-                    + "    CNM.BS_LONGTERM_LIAB, "
-                    + "    CLM.IS_CURRENCY, "
-                    + "    CNM.BS_LAND, "
-                    + "    CNM.BS_BUILDINGS, "
-                    + "    CNM.BS_CASH_BANK "
-                    + ") "
-                    + "SELECT * "
-                    + "FROM RankedData "
-                    + "WHERE APP = 1;";
+            String sql
+                    = "WITH RANKEDDATA AS (\n"
+                    + "    SELECT \n"
+                    + "        CRM.CU_REF,\n"
+                    + "        MAX(CRM.AP_REGNO) AS AP_REGNO,\n"
+                    + "        ROW_NUMBER() OVER (PARTITION BY CRM.CU_REF ORDER BY CRM.AP_REGNO DESC) AS APP,\n"
+                    + "        C.CU_CIF AS CIF,\n"
+                    + "        CC.CU_COMPNAME AS COMPNAME,\n"
+                    + "        CRM.REPORTTYPE AS REPORTTYPE,\n"
+                    + "        DATENAME(MONTH, MAX(CLM.IS_DATE_PERIODE)) AS RATINGMONTH,\n"
+                    + "        YEAR(MAX(CLM.IS_DATE_PERIODE)) AS RATINGYEAR,\n"
+                    + "        CAST(MAX(CLM.IS_DATE_PERIODE) AS DATE) AS FICIALDATE,\n"
+                    + "        R.RATINGBY AS RATEBY,\n"
+                    + "        CAST(MAX(CLM.IS_DATE_PERIODE) AS DATE) AS LASTDATEORDER,\n"
+                    + "        CRM.CURRENT_RATIO AS CURRENTRATIO,\n"
+                    + "        CRM.DEBT_EQUITY_RATIO AS DEBTRATIO,\n"
+                    + "        CNM.BS_SHAREHOLDER_EQUITY AS BSEQUITY,\n"
+                    + "        CRM.OPERATING_MARGIN AS OPRMARGIN,\n"
+                    + "        CLM.IS_OPR_EARN AS OPREARN,\n"
+                    + "        CLM.IS_NET_SALES AS NETSALES,\n"
+                    + "        CRM.DEBT_SERV_COVERAGE AS DEBTSERV,\n"
+                    + "        CNM.BS_SHT_TERM_LOAN AS SHORT_TERM_BORROWING,\n"
+                    + "        CNM.BS_LG_TRM_LOAN_RECEIV AS LONG_TERM_BORROWING,\n"
+                    + "        CLM.IS_CURRENCY AS CURRENCY,\n"
+                    + "        CNM.BS_LAND AS LAND,\n"
+                    + "        CNM.BS_BUILDINGS AS BUILDING,\n"
+                    + "        CNM.BS_CASH_BANK AS CASH_DEPOSIT,\n"
+                    + "        CNM.BS_DBST AS SHORT_TERM,\n"
+                    + "        CNM.BS_LONGTERM_DEBT AS LONG_TERM\n"
+                    + "    FROM CA_RATIO_MIDDLE CRM \n"
+                    + "    LEFT JOIN CUSTOMER C ON CRM.CU_REF = C.CU_REF \n"
+                    + "    LEFT JOIN CUST_COMPANY CC ON CRM.CU_REF = CC.CU_REF\n"
+                    + "    LEFT JOIN RATINGFINALADJUSTMENT R ON CRM.AP_REGNO = R.AP_REGNO\n"
+                    + "    LEFT JOIN RFRATINGCLASS R2 ON R.FINALRATING = R2.RATEID\n"
+                    + "    LEFT JOIN CA_LABARUGI_MIDDLE CLM ON CRM.CU_REF = CLM.CU_REF \n"
+                    + "        AND CRM.AP_REGNO = CLM.AP_REGNO \n"
+                    + "        AND CRM.DATE_PERIODE = CLM.IS_DATE_PERIODE \n"
+                    + "    LEFT JOIN CA_NERACA_MIDDLE CNM ON CRM.CU_REF = CNM.CU_REF \n"
+                    + "        AND CRM.AP_REGNO = CNM.AP_REGNO \n"
+                    + "        AND CRM.DATE_PERIODE = CNM.BS_DATE_PERIODE \n"
+                    + "    LEFT JOIN CA_REKON_MIDDLE CRM2 ON CRM.CU_REF = CRM2.CU_REF \n"
+                    + "        AND CRM.AP_REGNO = CRM2.AP_REGNO \n"
+                    + "        AND CRM.DATE_PERIODE = CRM2.DATE_PERIODE \n"
+                    + "    LEFT JOIN CA_RATIO_BPR CPR ON CRM.CU_REF = CPR.CU_REF \n"
+                    + "        AND CRM.AP_REGNO = CPR.AP_REGNO\n"
+                    + "    LEFT JOIN APPLICATION A ON CRM.CU_REF = A.CU_REF \n"
+                    + "        AND CRM.AP_REGNO = A.AP_REGNO \n"
+                    + "    LEFT JOIN SCOREBCG_RESULTHISTORY SR ON CRM.AP_REGNO = SR.AP_REGNO\n"
+                    + "    WHERE \n"
+                    + "        C.CU_CIF IS NOT NULL AND \n"
+                    + "        C.CU_CIF NOT LIKE '%C%' AND \n"
+                    + "        CRM.REPORTTYPE IN (" + String.join(", ", selectedOptions2) + ") AND \n"
+                    + "        MONTH(CLM.IS_DATE_PERIODE) IN (" + String.join(", ", selectedOptions) + ") AND \n"
+                    + "        YEAR(CLM.IS_DATE_PERIODE) = '" + FYear.getText() + "' AND \n"
+                    + "        CC.CU_COMPNAME LIKE '%" + search + "%' \n"
+                    + "    GROUP BY \n"
+                    + "        C.CU_CIF,\n"
+                    + "        CC.CU_COMPNAME,\n"
+                    + "        R.FINALRATING,\n"
+                    + "        R2.RATEDESC,\n"
+                    + "        R.ADJUSTRATING,\n"
+                    + "        R.RATINGDATE,\n"
+                    + "        R.RATINGBY,\n"
+                    + "        A.AP_USERNAME,\n"
+                    + "        CRM.CURRENT_RATIO,\n"
+                    + "        CRM.DEBT_EQUITY_RATIO,\n"
+                    + "        CNM.BS_SHAREHOLDER_EQUITY,\n"
+                    + "        CLM.IS_NET_SALES,\n"
+                    + "        CLM.IS_DATE_PERIODE,\n"
+                    + "        CRM.OPERATING_MARGIN,\n"
+                    + "        CLM.IS_OPR_EARN,\n"
+                    + "        CRM.DEBT_SERV_COVERAGE,\n"
+                    + "        CRM.LONGTERM_DEBT_TO_EQUITY,\n"
+                    + "        CRM.REPORTTYPE,\n"
+                    + "        CPR.LDR,\n"
+                    + "        CRM.AP_REGNO,\n"
+                    + "        CRM.CU_REF,\n"
+                    + "        CNM.BS_SHT_TERM_LOAN,\n"
+                    + "        CNM.BS_LG_TRM_LOAN_RECEIV,\n"
+                    + "        CLM.IS_CURRENCY,\n"
+                    + "        CNM.BS_LAND,\n"
+                    + "        CNM.BS_BUILDINGS,\n"
+                    + "        CNM.BS_CASH_BANK,\n"
+                    + "        CNM.BS_DBST,\n"
+                    + "        CNM.BS_LONGTERM_DEBT\n"
+                    + ")\n"
+                    + "SELECT * \n"
+                    + "FROM RANKEDDATA \n"
+                    + "WHERE APP = 1";
 
             stat = con.createStatement();
             res = stat.executeQuery(sql);
@@ -609,7 +619,6 @@ public final class Report_Rating extends javax.swing.JFrame {
         LReportDes = new javax.swing.JLabel();
         BRefresh = new javax.swing.JButton();
         BExport = new javax.swing.JButton();
-        LCopyright = new javax.swing.JLabel();
         jCheckBox1 = new javax.swing.JCheckBox();
         jCheckBox2 = new javax.swing.JCheckBox();
         jCheckBox3 = new javax.swing.JCheckBox();
@@ -687,10 +696,6 @@ public final class Report_Rating extends javax.swing.JFrame {
                 BExportActionPerformed(evt);
             }
         });
-
-        LCopyright.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        LCopyright.setForeground(new java.awt.Color(102, 102, 102));
-        LCopyright.setText("Credit By: Krisna Arisandi IT-System");
 
         jCheckBox1.setText("January");
 
@@ -812,13 +817,8 @@ public final class Report_Rating extends javax.swing.JFrame {
                                         .addComponent(jCheckBox14))
                                     .addComponent(LType)
                                     .addComponent(LMonth1))))
-                        .addGroup(PMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(PMainLayout.createSequentialGroup()
-                                .addGap(32, 32, 32)
-                                .addComponent(LIcons))
-                            .addGroup(PMainLayout.createSequentialGroup()
-                                .addGap(123, 123, 123)
-                                .addComponent(LCopyright))))
+                        .addGap(32, 32, 32)
+                        .addComponent(LIcons))
                     .addComponent(jCheckBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(PMainLayout.createSequentialGroup()
                         .addComponent(jCheckBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -845,8 +845,7 @@ public final class Report_Rating extends javax.swing.JFrame {
                                         .addComponent(BRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(BExport, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addComponent(LReport))
-                        .addGap(85, 85, 85)))
+                            .addComponent(LReport))))
                 .addContainerGap(112, Short.MAX_VALUE))
             .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING)
         );
@@ -856,8 +855,6 @@ public final class Report_Rating extends javax.swing.JFrame {
                 .addGroup(PMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(PMainLayout.createSequentialGroup()
                         .addComponent(LIcons, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(LCopyright)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(PMainLayout.createSequentialGroup()
                         .addGroup(PMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1049,7 +1046,6 @@ public final class Report_Rating extends javax.swing.JFrame {
     private javax.swing.JButton BSearch;
     private javax.swing.JTextField FSearchCriteria;
     private javax.swing.JTextField FYear;
-    private javax.swing.JLabel LCopyright;
     private javax.swing.JLabel LIcons;
     private javax.swing.JLabel LMonth;
     private javax.swing.JLabel LMonth1;
