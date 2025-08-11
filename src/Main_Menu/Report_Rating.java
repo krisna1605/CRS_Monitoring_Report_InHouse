@@ -638,6 +638,7 @@ public final class Report_Rating extends javax.swing.JFrame {
         jCheckBox15 = new javax.swing.JCheckBox();
         FSearchCriteria = new javax.swing.JTextField();
         LMonth1 = new javax.swing.JLabel();
+        LMonth2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setAutoRequestFocus(false);
@@ -784,41 +785,15 @@ public final class Report_Rating extends javax.swing.JFrame {
         LMonth1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         LMonth1.setText("CUSTOMER NAME");
 
+        LMonth2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        LMonth2.setText("By IT Development 2");
+
         javax.swing.GroupLayout PMainLayout = new javax.swing.GroupLayout(PMain);
         PMain.setLayout(PMainLayout);
         PMainLayout.setHorizontalGroup(
             PMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PMainLayout.createSequentialGroup()
                 .addGroup(PMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(PMainLayout.createSequentialGroup()
-                        .addGroup(PMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(LMonth)
-                            .addComponent(jCheckBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jCheckBox4, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(6, 6, 6)
-                        .addGroup(PMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jCheckBox10)
-                            .addComponent(jCheckBox11)
-                            .addGroup(PMainLayout.createSequentialGroup()
-                                .addGroup(PMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(PMainLayout.createSequentialGroup()
-                                        .addComponent(jCheckBox7, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(30, 30, 30)
-                                        .addGroup(PMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(LYears)
-                                            .addComponent(FYear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addComponent(jCheckBox9, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(22, 22, 22)
-                                .addGroup(PMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(FSearchCriteria, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(PMainLayout.createSequentialGroup()
-                                        .addComponent(jCheckBox13)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jCheckBox14))
-                                    .addComponent(LType)
-                                    .addComponent(LMonth1))))
-                        .addGap(32, 32, 32)
-                        .addComponent(LIcons))
                     .addComponent(jCheckBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(PMainLayout.createSequentialGroup()
                         .addComponent(jCheckBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -830,7 +805,6 @@ public final class Report_Rating extends javax.swing.JFrame {
                         .addComponent(jCheckBox12)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jCheckBox15))
-                    .addComponent(jCheckBox5, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(PMainLayout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(PMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -845,7 +819,45 @@ public final class Report_Rating extends javax.swing.JFrame {
                                         .addComponent(BRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(BExport, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addComponent(LReport))))
+                            .addComponent(LReport)))
+                    .addGroup(PMainLayout.createSequentialGroup()
+                        .addGroup(PMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(PMainLayout.createSequentialGroup()
+                                .addGroup(PMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(LMonth)
+                                    .addComponent(jCheckBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jCheckBox4, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(6, 6, 6)
+                                .addGroup(PMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jCheckBox10)
+                                    .addComponent(jCheckBox11)
+                                    .addGroup(PMainLayout.createSequentialGroup()
+                                        .addGroup(PMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(PMainLayout.createSequentialGroup()
+                                                .addComponent(jCheckBox7, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(30, 30, 30)
+                                                .addGroup(PMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(LYears)
+                                                    .addComponent(FYear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                            .addComponent(jCheckBox9, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(22, 22, 22)
+                                        .addGroup(PMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(FSearchCriteria, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGroup(PMainLayout.createSequentialGroup()
+                                                .addComponent(jCheckBox13)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(jCheckBox14))
+                                            .addComponent(LType)
+                                            .addComponent(LMonth1)))))
+                            .addComponent(jCheckBox5, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(PMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(PMainLayout.createSequentialGroup()
+                                .addGap(32, 32, 32)
+                                .addComponent(LIcons))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PMainLayout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(LMonth2)
+                                .addGap(129, 129, 129)))))
                 .addContainerGap(112, Short.MAX_VALUE))
             .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING)
         );
@@ -855,6 +867,8 @@ public final class Report_Rating extends javax.swing.JFrame {
                 .addGroup(PMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(PMainLayout.createSequentialGroup()
                         .addComponent(LIcons, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(LMonth2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(PMainLayout.createSequentialGroup()
                         .addGroup(PMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1049,6 +1063,7 @@ public final class Report_Rating extends javax.swing.JFrame {
     private javax.swing.JLabel LIcons;
     private javax.swing.JLabel LMonth;
     private javax.swing.JLabel LMonth1;
+    private javax.swing.JLabel LMonth2;
     private javax.swing.JLabel LReport;
     private javax.swing.JLabel LReportDes;
     private javax.swing.JLabel LType;
