@@ -49,7 +49,7 @@ public final class Report_Rating extends javax.swing.JFrame {
     //StringFormat stringFormat = new StringFormat("%.2f");
     //Call Other Class
     //Set Table ColumnContent
-    Object[] ColumnContent = {"CIF", "Nama Debitur", "Report Type", "Month", "Year", "Ficial Date", "Rating By", "Last Date Order", "Current Ratio", "Debt Equity Ratio", "Shareholder Equity", "Operating Margin", "Opr Earn", "Net Sales", "Debt Serv Coverage", "Short Term Borrowing", "Long Term Borrowing", "Currency", "Land", "Building", "Cash & Deposit"};
+    Object[] ColumnContent = {"CIF", "Nama Debitur", "Report Type", "Month", "Year", "Ficial Date", "Rating By", "Last Date Order", "Current Ratio", "Debt Equity Ratio", "Shareholder Equity", "Operating Margin", "Opr Earn", "Net Sales", "Debt Serv Coverage", "Short Term Borrowing", "Long Term Borrowing", "Currency", "Land", "Building", "Cash & Deposit", "Current Shareholder Loan", "Non Current Shareholder Loan"};
     public int index;
 
     public Report_Rating() {
@@ -181,6 +181,7 @@ public final class Report_Rating extends javax.swing.JFrame {
         } else if (FYear.getText()
                 .equals("")) {
             JOptionPane.showMessageDialog(null, "Please Input Year");
+            return;
 
         } else
             
@@ -213,7 +214,9 @@ public final class Report_Rating extends javax.swing.JFrame {
                     + "        CNM.BS_BUILDINGS AS BUILDING,\n"
                     + "        CNM.BS_CASH_BANK AS CASH_DEPOSIT,\n"
                     + "        CNM.BS_DBST AS SHORT_TERM,\n"
-                    + "        CNM.BS_LONGTERM_DEBT AS LONG_TERM\n"
+                    + "        CNM.BS_LONGTERM_DEBT AS LONG_TERM,\n"
+                    + "        CNM.BS_CURR_SHRHLDR_LOAN AS CURRENT_SH,\n"
+                    + "        CNM.BS_FXD_SHRHLDR_LOAN AS NONCURRENT_SH\n"
                     + "    FROM CA_RATIO_MIDDLE CRM \n"
                     + "    LEFT JOIN CUSTOMER C ON CRM.CU_REF = C.CU_REF \n"
                     + "    LEFT JOIN CUST_COMPANY CC ON CRM.CU_REF = CC.CU_REF\n"
@@ -268,7 +271,9 @@ public final class Report_Rating extends javax.swing.JFrame {
                     + "        CNM.BS_BUILDINGS,\n"
                     + "        CNM.BS_CASH_BANK,\n"
                     + "        CNM.BS_DBST,\n"
-                    + "        CNM.BS_LONGTERM_DEBT\n"
+                    + "        CNM.BS_LONGTERM_DEBT,\n"
+                    + "        CNM.BS_CURR_SHRHLDR_LOAN,\n"
+                    + "        CNM.BS_FXD_SHRHLDR_LOAN\n"
                     + ")\n"
                     + "SELECT * \n"
                     + "FROM RANKEDDATA \n"
@@ -300,8 +305,12 @@ public final class Report_Rating extends javax.swing.JFrame {
                     res.getString("CURRENCY"),
                     res.getString("LAND"),
                     res.getString("BUILDING"),
-                    res.getString("CASH_DEPOSIT")
-                    //String.format("%.10f", res.getFloat("CASH_DEPOSIT"))
+                    res.getString("CASH_DEPOSIT"),
+                    res.getString("CURRENT_SH"),
+                    res.getString("NONCURRENT_SH")
+                });
+
+                //String.format("%.10f", res.getFloat("CASH_DEPOSIT"))
 
                 /*res.getString("MappingCollect"),
                     /decimalFormat.format(res.getDouble("NetSales")),
@@ -317,8 +326,6 @@ public final class Report_Rating extends javax.swing.JFrame {
                     res.getString("NUMBEROFMONTH"),
                     res.getString("YEARS"),
                     res.getString("REPORTTYPE"),*/
-                });
-
             }
             //Set Display Laber & Other
             //FTotalRecord.setText(Integer.toString(TReport.getRowCount()));
@@ -430,6 +437,7 @@ public final class Report_Rating extends javax.swing.JFrame {
         } else if (FYear.getText()
                 .equals("")) {
             JOptionPane.showMessageDialog(null, "Please Input Year");
+            return;
 
         } else
             
@@ -462,7 +470,9 @@ public final class Report_Rating extends javax.swing.JFrame {
                     + "        CNM.BS_BUILDINGS AS BUILDING,\n"
                     + "        CNM.BS_CASH_BANK AS CASH_DEPOSIT,\n"
                     + "        CNM.BS_DBST AS SHORT_TERM,\n"
-                    + "        CNM.BS_LONGTERM_DEBT AS LONG_TERM\n"
+                    + "        CNM.BS_LONGTERM_DEBT AS LONG_TERM,\n"
+                    + "        CNM.BS_CURR_SHRHLDR_LOAN AS CURRENT_SH,\n"
+                    + "        CNM.BS_FXD_SHRHLDR_LOAN AS NONCURRENT_SH\n"
                     + "    FROM CA_RATIO_MIDDLE CRM \n"
                     + "    LEFT JOIN CUSTOMER C ON CRM.CU_REF = C.CU_REF \n"
                     + "    LEFT JOIN CUST_COMPANY CC ON CRM.CU_REF = CC.CU_REF\n"
@@ -518,7 +528,9 @@ public final class Report_Rating extends javax.swing.JFrame {
                     + "        CNM.BS_BUILDINGS,\n"
                     + "        CNM.BS_CASH_BANK,\n"
                     + "        CNM.BS_DBST,\n"
-                    + "        CNM.BS_LONGTERM_DEBT\n"
+                    + "        CNM.BS_LONGTERM_DEBT,\n"
+                    + "        CNM.BS_CURR_SHRHLDR_LOAN,\n"
+                    + "        CNM.BS_FXD_SHRHLDR_LOAN\n"
                     + ")\n"
                     + "SELECT * \n"
                     + "FROM RANKEDDATA \n"
@@ -530,7 +542,7 @@ public final class Report_Rating extends javax.swing.JFrame {
             while (res.next()) {
                 TReport.getColumnModel().getColumn(14).setCellRenderer(new CustomCellRenderer());
                 tabmode.addRow(new Object[]{
-                    res.getString("CIF"),
+                     res.getString("CIF"),
                     res.getString("CompName"),
                     res.getString("ReportType"),
                     res.getString("RatingMonth"),
@@ -550,8 +562,9 @@ public final class Report_Rating extends javax.swing.JFrame {
                     res.getString("CURRENCY"),
                     res.getString("LAND"),
                     res.getString("BUILDING"),
-                    String.format("%.10f", res.getFloat("CASH_DEPOSIT"))
-
+                    res.getString("CASH_DEPOSIT"),
+                    res.getString("CURRENT_SH"),
+                    res.getString("NONCURRENT_SH")
                 /*res.getString("MappingCollect"),
                     /decimalFormat.format(res.getDouble("NetSales")),
                     decimalFormat.format(res.getDouble("OperatingIncome")),
