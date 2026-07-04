@@ -742,7 +742,6 @@ public final class Report_Rating extends javax.swing.JFrame {
         TReport.setAutoCreateRowSorter(true);
         TReport.setBorder(new com.formdev.flatlaf.ui.FlatBorder());
         TReport.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
-        TReport.setForeground(new java.awt.Color(0, 0, 0));
         TReport.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -772,7 +771,6 @@ public final class Report_Rating extends javax.swing.JFrame {
         TReport.setGridColor(new java.awt.Color(0, 0, 0));
         TReport.setRowMargin(3);
         TReport.setSelectionBackground(new java.awt.Color(102, 255, 102));
-        TReport.setSelectionForeground(new java.awt.Color(0, 0, 0));
         TReport.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         TReport.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         TReport.setShowGrid(true);
@@ -798,8 +796,8 @@ public final class Report_Rating extends javax.swing.JFrame {
         LMonth1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         LMonth1.setText("CUSTOMER NAME");
 
-        LMonth2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        LMonth2.setText("By IT Development 2");
+        LMonth2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        LMonth2.setText("@By Krisna Arisandi - March 2025");
 
         javax.swing.GroupLayout PMainLayout = new javax.swing.GroupLayout(PMain);
         PMain.setLayout(PMainLayout);
@@ -870,7 +868,7 @@ public final class Report_Rating extends javax.swing.JFrame {
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PMainLayout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(LMonth2)
-                                .addGap(129, 129, 129)))))
+                                .addGap(90, 90, 90)))))
                 .addContainerGap(112, Short.MAX_VALUE))
             .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING)
         );
@@ -881,7 +879,7 @@ public final class Report_Rating extends javax.swing.JFrame {
                     .addGroup(PMainLayout.createSequentialGroup()
                         .addComponent(LIcons, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(LMonth2)
+                        .addComponent(LMonth2, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(PMainLayout.createSequentialGroup()
                         .addGroup(PMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
